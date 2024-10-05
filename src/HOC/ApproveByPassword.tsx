@@ -53,10 +53,10 @@ const ApproveByPassword = (WrappedComponent: React.FC<any>) => {
             </DialogContent>
             {isPasswordIncorrect && (<Alert severity="error">Невірний пароль</Alert>)}
             <DialogActions>
-              <Button onClick={handleClose} color="primary">
+              <Button onClick={handleClose} color="secondary">
                 Повернутись
               </Button>
-              <Button onClick={handleButtonClick} color="primary">
+              <Button onClick={handleButtonClick} color="secondary">
                 Авторизуватись
               </Button>
             </DialogActions>

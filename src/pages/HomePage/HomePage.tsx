@@ -110,7 +110,8 @@ const HomePage = () => {
     const [snackbarMessage, setSnackbarMessage] = useState<string>('');
     const [snackbarSeverity, setSnackbarSeverity] = useState<'success' | 'error'>('success');
     const [showIconView, setShowIconView] = useState(() => {
-        return localStorage.getItem('wasteListIconView') === 'true';
+        const storedValue = localStorage.getItem('wasteListIconView');
+        return storedValue === null ? true : storedValue === 'true';
     });
 
     useEffect(() => {
@@ -254,7 +255,7 @@ const HomePage = () => {
                     display: 'grid',
                     gridTemplateColumns: 'repeat(5, 1fr)',
                     gap: 2,
-                    height: '290px',
+                    height: '145px',
                     overflowY: 'auto'
                 }}>
                     {Array.from({ length: 10 }).map((_, colIndex) => (
@@ -302,7 +303,13 @@ const HomePage = () => {
         }
 
         return (
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+            <Box
+                sx={{
+                    display: 'grid',
+                    gridTemplateColumns: 'repeat(auto-fill, minmax(200px, 1fr))',
+                    gap: 1,
+                }}
+            >
                 {wasteList.map((item, index) => (
                     <Box
                         key={index}
@@ -312,8 +319,7 @@ const HomePage = () => {
                             borderRadius: 1,
                             display: 'flex',
                             justifyContent: 'space-between',
-                            minWidth: '200px',
-                            flex: '1 1 auto',
+                            width: '100%',
                         }}
                     >
                         <Typography>{item.product}</Typography>

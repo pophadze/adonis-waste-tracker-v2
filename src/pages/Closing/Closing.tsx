@@ -136,42 +136,70 @@ const Closing: React.FC = () => {
   const [previousDaysData, setPreviousDaysData] = useState<DayData[]>([]);
   const [selectedItems, setSelectedItems] = useState<SelectedItems>({});
   const [tabIndex, setTabIndex] = useState(0);
-  const [isSelectAll, setIsSelectAll] = useState(false);
-  const [loading, setLoading] = useState(true);
+  const [selectAllStates, setSelectAllStates] = useState<{ [key: string]: boolean }>({});
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        setLoading(true);
         const data = await loadPreviousDaysData();
         setPreviousDaysData(data);
       } catch (err) {
         setError('Failed to load data. Please try again.');
       } finally {
-        setLoading(false);
       }
     };
 
     fetchData();
   }, []);
 
-  const handleItemToggle = (itemName: string) => {
+  const handleItemToggle = (date: string, itemName: string) => {
+    const itemKey = `${date}|${itemName}`;
     setSelectedItems(prev => ({
       ...prev,
-      [itemName]: !prev[itemName]
+      [itemKey]: !prev[itemKey]
     }));
+
+    // Update select all state if needed
+    const currentData = previousDaysData.find(day => day.date === date)?.data;
+    if (currentData) {
+      const pendingItems = Object.keys(currentData).filter(key => !key.includes('--wasted'));
+      const allSelected = pendingItems.every(item => selectedItems[`${date}|${item}`]);
+
+      setSelectAllStates(prev => ({
+        ...prev,
+        [date]: allSelected
+      }));
+    }
   };
 
   const handleMoveSelectedItems = async (date: string) => {
     try {
+      const itemsToMove = Object.entries(selectedItems)
+        .filter(([key, isSelected]) => isSelected && key.startsWith(`${date}|`))
+        .map(([key]) => key.split('|')[1]);
+
       await Promise.all(
-        Object.entries(selectedItems)
-          .filter(([_, isSelected]) => isSelected)
-          .map(([itemName]) => moveItemToWastedState(date, itemName))
+        itemsToMove.map(itemName => moveItemToWastedState(date, itemName))
       );
 
-      setSelectedItems({});
+      // Clear selections for this date
+      setSelectedItems(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(key => {
+          if (key.startsWith(`${date}|`)) {
+            delete updated[key];
+          }
+        });
+        return updated;
+      });
+
+      // Reset select all state for this date
+      setSelectAllStates(prev => ({
+        ...prev,
+        [date]: false
+      }));
+
       const updatedData = await loadPreviousDaysData();
       setPreviousDaysData(updatedData);
     } catch (error) {
@@ -183,26 +211,36 @@ const Closing: React.FC = () => {
     const currentData = previousDaysData.find(day => day.date === date)?.data;
     if (!currentData) return;
 
-    const newSelected = !isSelectAll;
-    const updatedItems: SelectedItems = {};
+    const currentSelectAllState = selectAllStates[date] || false;
+    const newSelectAllState = !currentSelectAllState;
 
-    Object.keys(currentData).forEach(itemName => {
-      if (!itemName.includes('--wasted')) {
-        updatedItems[itemName] = newSelected;
+    // Update select all state for current tab
+    setSelectAllStates(prev => ({
+      ...prev,
+      [date]: newSelectAllState
+    }));
+
+    // Update selected items
+    const updatedItems = { ...selectedItems };
+
+    // Clear previous selections for this date
+    Object.keys(selectedItems).forEach(key => {
+      if (key.startsWith(date)) {
+        delete updatedItems[key];
       }
     });
 
-    setSelectedItems(updatedItems);
-    setIsSelectAll(newSelected);
-  };
+    // Add new selections if selecting all
+    if (newSelectAllState) {
+      Object.keys(currentData).forEach(itemName => {
+        if (!itemName.includes('--wasted')) {
+          updatedItems[`${date}|${itemName}`] = true;
+        }
+      });
+    }
 
-  if (loading) {
-    return (
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-        <Typography>Loading...</Typography>
-      </Box>
-    );
-  }
+    setSelectedItems(updatedItems);
+  };
 
   return (
     <Box sx={{ maxWidth: 1200, margin: '0 auto', p: 3 }}>
@@ -248,7 +286,7 @@ const Closing: React.FC = () => {
                       <ListItem
                         key={itemName}
                         sx={{
-                          bgcolor: itemName.includes('RW') ? 'primary.light' : 'success.light',
+                          bgcolor: itemName.includes('RW') ? 'primary.main' : 'success.main',
                           borderRadius: 1,
                           mb: 1,
                         }}
@@ -276,8 +314,8 @@ const Closing: React.FC = () => {
                       >
                         <ListItemIcon>
                           <Checkbox
-                            checked={selectedItems[itemName] || false}
-                            onChange={() => handleItemToggle(itemName)}
+                            checked={selectedItems[`${date}|${itemName}`] || false}
+                            onChange={() => handleItemToggle(date, itemName)}
                           />
                         </ListItemIcon>
                         <ListItemText
@@ -300,7 +338,7 @@ const Closing: React.FC = () => {
                     variant="outlined"
                     onClick={() => handleSelectAll(date)}
                   >
-                    {isSelectAll ? 'Скасувати вибір' : 'Обрати всі'}
+                    {selectAllStates[date] ? 'Скасувати вибір' : 'Обрати всі'}
                   </Button>
                 </Stack>
               </>

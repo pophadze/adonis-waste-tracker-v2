@@ -27,7 +27,7 @@ function App() {
             </Routes>
           </Box>
 
-          <AppBar position="static" component="footer">
+          <AppBar position="static" component="footer" sx={{ borderRadius: '0'}}>
             <Toolbar sx={{ maxWidth: '400px', margin: '0 auto' }}> {/* Center the Toolbar within the AppBar */}
               <Box display="flex" justifyContent="space-around" width="100%">
                 {/* Adjust justifyContent to space-around for equal spacing */}
