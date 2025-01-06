@@ -526,15 +526,15 @@ const HomePage = () => {
 
                 {/* Products Grid - Up to 7 items per row */}
                 {menuItems && menuItems[selectedCategory]?.length > 0 && (
-                    <Box display="flex" flexWrap="wrap">
+                    <Box display="flex" flexWrap="wrap" justifyContent="center">
                         {menuItems && menuItems[selectedCategory].map((item, index) => (
                             <Box
                                 key={index}
-                                flexBasis={{ xs: '50%', sm: '25%', md: '16.2857%' }} // Responsive widths
+                                flexBasis={{ xs: '50%', sm: '16.666%', md: '16.666%' }} // Updated tablet size to show 6 items
                                 display="flex"
                                 justifyContent="center"
-                                alignItems="flex-start" // Align items to the start (top)
-                                sx={{ padding: 1 }} // Optional padding for spacing
+                                alignItems="flex-start"
+                                sx={{ padding: 1 }}
                             >
                                 <Card
                                     onClick={() => handleAddToList(item[0], selectedCategory)}
@@ -542,11 +542,11 @@ const HomePage = () => {
                                         cursor: 'pointer',
                                         '&:hover': { transform: 'scale(1.02)' },
                                         transition: 'transform 0.2s',
-                                        width: '100%', // Fill available width
-                                        height: 0, // Set height to 0 initially
-                                        paddingBottom: '100%', // Maintain square aspect ratio
-                                        position: 'relative', // Set position for absolute child elements
-                                        overflow: 'hidden', // Ensure content doesn't overflow
+                                        width: '100%',
+                                        height: 0,
+                                        paddingBottom: '100%',
+                                        position: 'relative',
+                                        overflow: 'hidden',
                                     }}
                                 >
                                     <CardMedia
@@ -554,24 +554,24 @@ const HomePage = () => {
                                         image={item[1]}
                                         alt={item[0]}
                                         sx={{
-                                            position: 'absolute', // Position absolutely to cover the square
-                                            top: '0px', // Start from the top
+                                            position: 'absolute',
+                                            top: '0px',
                                             left: 0,
                                             right: 0,
-                                            height: '100%', // Fill height to ensure it's square
-                                            width: '100%', // Fill available width
-                                            objectFit: 'cover', // Maintain aspect ratio while covering the area
+                                            height: '100%',
+                                            width: '100%',
+                                            objectFit: 'cover',
                                         }}
                                     />
                                     <CardContent
                                         sx={{
-                                            position: 'absolute', // Position content absolutely
-                                            top: 0, // Align to the bottom
+                                            position: 'absolute',
+                                            top: 0,
                                             left: 0,
                                             right: 0,
                                             height: '2.7rem',
-                                            background: 'rgba(255, 255, 255, 0.7)', // Semi-transparent background
-                                            padding: '5px', // Optional: add some padding
+                                            background: 'rgba(255, 255, 255, 0.7)',
+                                            padding: '5px',
                                         }}
                                     >
                                         <Typography variant="body1" align="center" sx={{ lineHeight: '1.1rem' }}>

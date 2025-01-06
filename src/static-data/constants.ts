@@ -2,12 +2,12 @@ import { Category } from "../types/types";
 import bunImage from "../assets/bun.png";
 
 export const CATEGORIES: Category[] = [
-    { id: 0, name: 'Бургери', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/McD_burgers_roll_2023_160x160:category-panel-left-desktop' },
-    { id: 1, name: 'Снеки', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_chicken_160x160:category-panel-left-desktop' },
-    { id: 2, name: 'Картопля', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/menu_frenchfries_160x160:category-panel-left-desktop' },
-    { id: 3, name: 'Соуси', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_sauces_160x160:category-panel-left-desktop' },
-    { id: 4, name: 'Напої', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/McD_drinks_2023_160x160:category-panel-left-desktop' },
-    { id: 5, name: 'Десерти', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_desserts___shakes_160x160-1:category-panel-left-desktop' },
+    { id: 0, name: 'Бургери', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_burgers_v2:category-panel-left-desktop' },
+    { id: 1, name: 'Снеки', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_chicken:category-panel-left-desktop' },
+    { id: 2, name: 'Картопля', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_fries:category-panel-left-desktop' },
+    { id: 3, name: 'Соуси', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_sauce:category-panel-left-desktop' },
+    { id: 4, name: 'Напої', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_drinks:category-panel-left-desktop' },
+    { id: 5, name: 'Десерти', imageUrl: 'https://s7d1.scene7.com/is/image/mcdonalds/nav_desserts:category-panel-left-desktop' },
     { id: 6, name: 'Інгредієнти', imageUrl: bunImage },
 ];
 
